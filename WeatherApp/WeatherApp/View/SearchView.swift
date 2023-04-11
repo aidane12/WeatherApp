@@ -29,7 +29,6 @@ struct SearchView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .foregroundColor(.gray)
             .navigationTitle("Search")
             .searchable(text: $viewModel.searchTerm, placement: .navigationBarDrawer(displayMode: .always)) {
                 ForEach(viewModel.searchResults, id: \.self) { city in

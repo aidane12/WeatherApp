@@ -22,19 +22,24 @@ class WeatherDetailsViewModel: ObservableObject {
                 self.weather.city.country = weather.location.country
                 self.weather.city.time = weather.location.localtime
                 self.weather.imageURL = weather.current.weather_icons[0]
+                self.weather.city.formattedDate = self.weather.city.time.convertToDisplayDateFormat()
+                self.weather.city.formattedTime = self.weather.city.time.convertToDisplayTimeFormat()
+                
                 
                 self.getWeatherImage(withString: self.weather.imageURL) { image, error in
-                        self.weather.image = image
-                        self.weather.setSharableDetails()
+                    self.weather.image = image
+                    self.weather.setSharableDetails()
                     
                 }
             }
             weather.city.name = cityName
+        
     }
     
     
     // Business logic
     func getWeatherData(cityName: String, completion: @escaping (WeatherResponse) -> ()) {
+        
         networkService.getWeather(cityName: cityName) { [self] weatherResponse in
             let weather = weatherResponse
             completion(weather)

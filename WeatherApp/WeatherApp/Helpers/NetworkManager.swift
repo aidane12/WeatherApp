@@ -19,18 +19,19 @@ class NetworkManager {
         guard let weatherUrl = URL(string: AppConstants.weatherURLString + cityName) else {
             return
         }
-        
-        URLSession.shared.dataTask(with: weatherUrl) { data, response, error in
-            if error == nil {
-                guard let data = data else {return}
-                do {
-                    let result = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                    completion(result)
-                } catch {
-                    debugPrint(error)
+            
+            URLSession.shared.dataTask(with: weatherUrl) { data, response, error in
+                if error == nil {
+                    guard let data = data else {return}
+                    do {
+                        let result = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                        completion(result)
+                    } catch {
+                        debugPrint(error)
+                    }
                 }
-            }
-        }.resume()
+            }.resume()
+        
     }
     
     func getImageWith(imageString: String, completion: @escaping (Image, NetworkError?) -> Void) {
@@ -67,3 +68,5 @@ class NetworkManager {
         
     }
 }
+
+

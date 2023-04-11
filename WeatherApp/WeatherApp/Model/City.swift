@@ -12,4 +12,6 @@ struct City: Identifiable {
     var name: String
     var country: String
     var time: String
+    var formattedDate: String?
+    var formattedTime: String?
 }

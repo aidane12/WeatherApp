@@ -26,6 +26,7 @@
 		59D5AE6F29D79E3C00841BAC /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D5AE6E29D79E3C00841BAC /* Weather.swift */; };
 		59D5AE7129D79E6000841BAC /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D5AE7029D79E6000841BAC /* City.swift */; };
 		59DB6C5729DBB70F0048C5B2 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DB6C5629DBB70F0048C5B2 /* LazyView.swift */; };
+		59E8F98429E60DCC00214AED /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E8F98329E60DCC00214AED /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		59D5AE6E29D79E3C00841BAC /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		59D5AE7029D79E6000841BAC /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		59DB6C5629DBB70F0048C5B2 /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
+		59E8F98329E60DCC00214AED /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 			children = (
 				59A5F3CD29D65B260058DF96 /* AppConstants.swift */,
 				59A5F3CF29D65B6F0058DF96 /* NetworkManager.swift */,
+				59E8F98329E60DCC00214AED /* Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				59DB6C5729DBB70F0048C5B2 /* LazyView.swift in Sources */,
 				59310AFD29DCFE7100045EBD /* WeatherDetailsView.swift in Sources */,
 				591300AC29D50AF700F3780C /* SearchView.swift in Sources */,
+				59E8F98429E60DCC00214AED /* Extensions.swift in Sources */,
 				59A5F3D229D65BF60058DF96 /* WeatherDetailsViewModel.swift in Sources */,
 				591300AA29D50AF700F3780C /* WeatherAppApp.swift in Sources */,
 				59A25B3F29DDE0FC0056D9E9 /* SearchResultResponse.swift in Sources */,
