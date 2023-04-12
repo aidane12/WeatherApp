@@ -13,50 +13,31 @@ struct SearchView: View {
     
     @ObservedObject var viewModel = SearchViewModel()
     @State var cityName: String = ""
-    @State var pushActive = false
-    
+        
     var body: some View {
-        NavigationView{
-            VStack{
-                    Text("Search")
-                        .foregroundColor(.black)
-                        .fontWeight(.bold)
-                        .padding(.vertical, 10)
-                        .frame(width: 200)
-                        .background(Color.green)
-                        .clipShape(Capsule())
+        NavigationStack {
+            List {
+                ForEach(viewModel.searchResults, id: \.self) { city in
+                    NavigationLink {
+                        WeatherDetailsView(viewModel: WeatherDetailsViewModel(cityName: city))
+                    } label: {
+                        Text(city)
+                    }
                 }
             }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle("Search")
-            .searchable(text: $viewModel.searchTerm, placement: .navigationBarDrawer(displayMode: .always)) {
-                ForEach(viewModel.searchResults, id: \.self) { city in
-                    NavigationLink(destination: LazyView(view: {
-                        WeatherDetailsView(viewModel: WeatherDetailsViewModel(cityName: city))
-                    }), isActive: self.$pushActive) {
-                        Text(city).searchCompletion(city).onTapGesture {
-                            print("this was tapped \(city)")
-                            self.pushActive = true
-                        }
-                    }
-                    //pushing view on tap of search result:
-               // https://stackoverflow.com/questions/57315409/push-view-programmatically-in-callback-swiftui
-                }
+            .navigationTitle("Weather Search")
+            .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $viewModel.searchTerm, placement: .automatic, prompt: "Enter a city")
+            .onSubmit(of: .search){
+                print("search suggestion was tapped")
             }
         }
+        
+        
     }
-
-
-struct Search: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            
-    }
+       
 }
-
-
-
+    
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         SearchView()
