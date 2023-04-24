@@ -8,12 +8,29 @@
 import Foundation
 import UIKit
 import SwiftUI
+import Network
 
 enum NetworkError {
     case apiFailed
 }
 
-class NetworkManager {
+class NetworkManager: ObservableObject {
+    let monitor = NWPathMonitor()
+    @Published var isDisconnected = false
+    
+    init() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                if path.status == .unsatisfied {
+                    self.isDisconnected = true
+                } else {
+                    self.isDisconnected = false
+                }
+            }
+        }
+        monitor.start(queue: DispatchQueue(label: "Network Manager"))
+    }
+    
     func getWeather(cityName: String, completion: @escaping (WeatherResponse) -> Void) {
         
         guard let weatherUrl = URL(string: AppConstants.weatherURLString + cityName) else {

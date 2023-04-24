@@ -13,6 +13,7 @@ struct WeatherDetailsView: View {
     @ObservedObject var viewModel : WeatherDetailsViewModel
     @State var ferinheight : Int = 0
     
+        
     var body: some View {
         VStack(){
             HStack{
@@ -21,6 +22,7 @@ struct WeatherDetailsView: View {
             }
             .font(.system(size: 29, weight: .semibold))
             .padding(.bottom, 50)
+
           
             
             HStack{

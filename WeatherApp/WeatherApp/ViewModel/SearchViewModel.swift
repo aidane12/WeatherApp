@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class SearchViewModel: ObservableObject {
     @Published var searchTerm = ""
@@ -13,6 +14,8 @@ class SearchViewModel: ObservableObject {
 
     @Published var searchResults: [String] = [] //when you find matching data we assign to search results
     let networkService = NetworkManager()
+    
+    
     
     init() {
         setupSearchLogic()
@@ -50,6 +53,10 @@ class SearchViewModel: ObservableObject {
                 
             }
         }
+    }
+
+    func clearSearchTerm() {
+        searchTerm = ""
     }
     
 }

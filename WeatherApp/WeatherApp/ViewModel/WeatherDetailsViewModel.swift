@@ -33,6 +33,7 @@ class WeatherDetailsViewModel: ObservableObject {
                 }
             }
             weather.city.name = cityName
+            
         
     }
     
