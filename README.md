@@ -1,2 +1,2 @@
-# WeatherApp
-test
+# Weather App
+Practice swift project 
