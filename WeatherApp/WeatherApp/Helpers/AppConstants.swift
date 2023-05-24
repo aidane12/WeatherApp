@@ -8,7 +8,7 @@
 import Foundation
 
 struct AppConstants {
-    //DON'T COMMIT API KEY 
+    static let apiKey = ""
     static let weatherURLString = "http://api.weatherstack.com/current?access_key=\(apiKey)&query="
     static let searchURLString = "https://api.weatherstack.com/autocomplete?access_key=\(apiKey)&query="
 }

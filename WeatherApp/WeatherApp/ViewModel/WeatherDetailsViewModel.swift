@@ -12,12 +12,17 @@ class WeatherDetailsViewModel: ObservableObject {
     
     private var cityName : String
     @Published var weather = Weather(temp: 0, city: City(name: "no name", country: "no country", time: "no time"), imageURL: "no image", tempFerinheight: 0 , image: Image("placeholder"))
+    @Published var isLoading = true
         
-    let networkService = NetworkManager()
+    let networkManager: NetworkManagerProtocol
     
-    init(cityName: String) {
+    init(cityName: String, networkManager: NetworkManagerProtocol = NetworkManager()) {
+            self.networkManager = networkManager
             self.cityName = cityName
             self.getWeatherData(cityName: cityName) { [self] weather in
+        
+                isLoading = false
+                
                 self.weather.tempCelcuis = weather.current.temperature
                 self.weather.city.country = weather.location.country
                 self.weather.city.time = weather.location.localtime
@@ -32,25 +37,26 @@ class WeatherDetailsViewModel: ObservableObject {
                     
                 }
             }
-            weather.city.name = cityName
-            
+            self.weather.city.name = cityName
         
     }
-    
-    
-    // Business logic
+
     func getWeatherData(cityName: String, completion: @escaping (WeatherResponse) -> ()) {
         
-        networkService.getWeather(cityName: cityName) { [self] weatherResponse in
-            let weather = weatherResponse
-            completion(weather)
+        networkManager.getWeather(cityName: cityName) { (weatherResponse, error) in
+            guard let weather = weatherResponse else { return }
+            DispatchQueue.main.async {
+                completion(weather)
+            }
         }
         weather.tempFerinheight = calculateFahrenheit(celsius: weather.tempCelcuis)
     }
     
     func getWeatherImage(withString: String, completion: @escaping (Image, NetworkError?) -> ()) {
-        networkService.getImageWith(imageString: withString) { image, error in
+        networkManager.getImageWith(imageString: withString) { image, error in
+            DispatchQueue.main.async {
                 completion(image, error)
+            }
         }
     }
     

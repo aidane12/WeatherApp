@@ -20,3 +20,19 @@ class DataContoller: ObservableObject {
     }
 }
 
+//https://medium.com/tiendeo-tech/ios-how-to-unit-test-core-data-eb4a754f2603
+class TestCoreDataStack: NSObject {
+    lazy var persistentContainer: NSPersistentContainer = {
+        let description = NSPersistentStoreDescription()
+        description.url = URL(fileURLWithPath: "/dev/null")
+        let container = NSPersistentContainer(name: "savedSearches")
+        container.persistentStoreDescriptions = [description]
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        return container
+    }()
+}
+

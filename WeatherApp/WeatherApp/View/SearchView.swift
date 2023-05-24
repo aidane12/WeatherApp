@@ -10,14 +10,14 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @ObservedObject var viewModel = SearchViewModel()
-    @State var cityName: String? = ""
     @Environment(\.managedObjectContext) var viewContext
+    @State var cityName: String? = ""
+    @ObservedObject var viewModel = SearchViewModel()
     
     var body: some View {
         
         let searchHistoryViewModel = SearchHistoryViewModel(viewContext: viewContext)
-        
+       
         NavigationStack {
             List {
                 ForEach(viewModel.searchResults, id: \.self) { city in
@@ -35,7 +35,7 @@ struct SearchView: View {
             .onDisappear {
                 guard let cityName = cityName else { return }
                     searchHistoryViewModel.savedSearch(cityName: cityName)
-                    viewModel.clearSearchTerm()
+                viewModel.clearSearchTerm()
             }
             .navigationBarItems(trailing:
             NavigationLink {
@@ -53,7 +53,6 @@ struct SearchView: View {
             }
         }
     }
-    
 }
 
 

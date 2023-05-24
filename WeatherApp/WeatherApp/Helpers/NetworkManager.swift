@@ -10,11 +10,18 @@ import UIKit
 import SwiftUI
 import Network
 
-enum NetworkError {
-    case apiFailed
+enum NetworkError: String {
+    case apiFailed = "api error"
+    case userInputError = "user data error"
 }
 
-class NetworkManager: ObservableObject {
+protocol NetworkManagerProtocol {
+    func getWeather(cityName: String, completion: @escaping (WeatherResponse?, NetworkError?) -> Void)
+    func getImageWith(imageString: String, completion: @escaping (Image, NetworkError?) -> Void)
+    func getSearchResults(searchTerm: String, completion: @escaping(SearchResultResponse, NetworkError?)-> Void)
+}
+
+class NetworkManager: ObservableObject, NetworkManagerProtocol {
     let monitor = NWPathMonitor()
     @Published var isDisconnected = false
     
@@ -31,24 +38,22 @@ class NetworkManager: ObservableObject {
         monitor.start(queue: DispatchQueue(label: "Network Manager"))
     }
     
-    func getWeather(cityName: String, completion: @escaping (WeatherResponse) -> Void) {
-        
-        guard let weatherUrl = URL(string: AppConstants.weatherURLString + cityName) else {
-            return
-        }
+    func getWeather(cityName: String, completion: @escaping (WeatherResponse?, NetworkError?) -> Void) {
+            guard let weatherUrl = URL(string: AppConstants.weatherURLString + cityName) else {
+                return
+            }
             
             URLSession.shared.dataTask(with: weatherUrl) { data, response, error in
                 if error == nil {
                     guard let data = data else {return}
                     do {
                         let result = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                        completion(result)
+                        completion(result, nil)
                     } catch {
-                        debugPrint(error)
+                        completion(nil, NetworkError.apiFailed)
                     }
                 }
             }.resume()
-        
     }
     
     func getImageWith(imageString: String, completion: @escaping (Image, NetworkError?) -> Void) {
@@ -82,7 +87,6 @@ class NetworkManager: ObservableObject {
                 }
             }
         }.resume()
-        
     }
 }
 

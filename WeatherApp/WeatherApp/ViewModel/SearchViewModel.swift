@@ -7,17 +7,16 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 class SearchViewModel: ObservableObject {
     @Published var searchTerm = ""
-    var data : [String] = []
-
-    @Published var searchResults: [String] = [] //when you find matching data we assign to search results
-    let networkService = NetworkManager()
+    var searchResultsViewArray : [String] = []
+    @Published var searchResults: [String] = []
+    let networkManager: NetworkManagerProtocol
     
-    
-    
-    init() {
+    init(networkManager: NetworkManagerProtocol = NetworkManager()) {
+        self.networkManager = networkManager
         setupSearchLogic()
     }
     
@@ -27,30 +26,46 @@ class SearchViewModel: ObservableObject {
             .debounce(for: 0.3, scheduler: DispatchQueue.main)
             .map { searchTerm in //The Publisher assigned to searchTerm
                 
-                self.addSearchResultsToView()
+                self.addSearchResultsToView() { _ in
+                    
+                }
                 
-                return self.data.filter { city in //if the cities we have weather data on (api look up call) matches the search term assign it to searchResults
+                return self.searchResultsViewArray.filter { city in //if the cities we have weather data on (api look up call) matches the search term assign it to searchResults
                     city.lowercased().contains(searchTerm.lowercased()) //The operation
                 }
             }
             .assign(to: &$searchResults) //The subcriber assigned to searcResult
     }
     
-    func getSearchResultsFromAPI(searchTerm: String, completion: @escaping (SearchResultResponse, NetworkError?) -> ()) {
-        networkService.getSearchResults(searchTerm: searchTerm) { searchResultsResponse, error  in
-            let searchResults = searchResultsResponse
-            completion(searchResults, error)
+    func getSearchResultsFromAPI(searchTerm: String, completion: @escaping (SearchResultResponse?, NetworkError?) -> ()) {
+        if searchTerm == "" {
+            completion(nil, NetworkError.userInputError)
+        } else {
+            
+            networkManager.getSearchResults(searchTerm: searchTerm) { searchResultsResponse, error  in
+                do {
+                    let searchResults = searchResultsResponse
+                    completion(searchResults, error)
+                }
+            }
         }
     }
     
-    func addSearchResultsToView() {
+    func addSearchResultsToView(completion: @escaping (Bool) -> ()) {
         self.getSearchResultsFromAPI(searchTerm: searchTerm) { searchResults, error in
+            guard let searchResults = searchResults else {
+                completion(false)
+                return
+            }
             for searchResult in searchResults.results {
-                let location = searchResult.name //+ ", " + searchResult.country
-                if !self.data.contains(location) {
-                    self.data.append(location)
+                let location = searchResult.name 
+                if !self.searchResultsViewArray.contains(location) {
+                    self.searchResultsViewArray.append(location)
+                    completion(true)
                 }
-                
+            }
+            if error != nil {
+                completion(false)
             }
         }
     }
@@ -58,5 +73,4 @@ class SearchViewModel: ObservableObject {
     func clearSearchTerm() {
         searchTerm = ""
     }
-    
 }

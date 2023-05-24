@@ -14,7 +14,6 @@ extension String {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = .current
-        
         return dateFormatter.date(from: self)
     }
     

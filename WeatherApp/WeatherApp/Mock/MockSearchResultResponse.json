@@ -1,0 +1,35 @@
+{
+    "request": {
+        "query": "london",
+        "results": 3
+    },
+    "results": [
+        {
+            "name": "London",
+            "country": "United Kingdom",
+            "region": "City of London, Greater London",
+            "lat": "51.517",
+            "lon": "-0.106",
+            "timezone_id": "Europe/London",
+            "utc_offset": "1.0"
+        },
+        {
+            "name": "London",
+            "country": "Canada",
+            "region": "Ontario",
+            "lat": "42.983",
+            "lon": "-81.250",
+            "timezone_id": "America/Toronto",
+            "utc_offset": "-4.0"
+        },
+        {
+            "name": "Londonderry",
+            "country": "United Kingdom",
+            "region": "North Yorkshire",
+            "lat": "54.282",
+            "lon": "-1.533",
+            "timezone_id": "Europe/London",
+            "utc_offset": "1.0"
+        }
+    ]
+}
