@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-class SearchHistoryViewModel: ObservableObject {
+final class SearchHistoryViewModel: ObservableObject {
 
     let viewContext : NSManagedObjectContext
     var citySearches = [CitySearch]()

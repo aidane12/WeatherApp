@@ -29,8 +29,8 @@ final class WeatherDetailsViewModel_Tests: XCTestCase {
     
     func testWeatherDetailsAPICall_getWeatherData_dateTimeData() {
         viewModel.getWeatherData(cityName: "london") { weatherResponse in
-            XCTAssertEqual(weatherResponse.location.localtime.convertToDisplayDateFormat(), "Tuesday, Apr 25" )
-            XCTAssertEqual(weatherResponse.location.localtime.convertToDisplayTimeFormat(), "6:27 PM" )
+            XCTAssertEqual(weatherResponse.location.date.convertToDayMonthYearFormat(), "Tuesday, Apr 25" )
+            XCTAssertEqual(weatherResponse.location.date.convertToTimeFormat(), "6:27 PM" )
         }
     }
     

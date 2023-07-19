@@ -33,11 +33,9 @@ final class SearchViewModel_Tests: XCTestCase {
     }
 
     func testSearchView_addSearchResultsToView_success() {
-        let searchTerm = "london"
-        viewModel.getSearchResultsFromAPI(searchTerm: searchTerm) { searchResultResponse, error in
-            XCTAssertEqual(searchResultResponse?.results[0].name, "London")
-            XCTAssertEqual(searchResultResponse?.results[2].name, "Londonderry")
-        }
+        viewModel.searchTerm = "london"
+        
+        // Removed redundant test you already handle above.
         
         viewModel.addSearchResultsToView() { success in
             if success {

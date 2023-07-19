@@ -22,7 +22,7 @@ final class SearchHistoryViewModel_Tests: XCTestCase {
     
     func testSearchHistory_savedSearch() {
         //Given
-        let city = City(name: "Dublin", country: "Ireland", time: "10:30")
+        let city = City(name: "Dublin", country: "Ireland", date: Date())
         viewModel.savedSearch(cityName: city.name)
 
         //WHEN
@@ -37,7 +37,7 @@ final class SearchHistoryViewModel_Tests: XCTestCase {
     
     func testSeachHistory_checkIfAlreadyCityExists_true() {
         //Given
-        let city = City(name: "Dublin", country: "Ireland", time: "10:30")
+        let city = City(name: "Dublin", country: "Ireland", date: Date())
         viewModel.savedSearch(cityName: city.name)
         
         //WHEN
@@ -49,7 +49,7 @@ final class SearchHistoryViewModel_Tests: XCTestCase {
     
     func testSeachHistory_checkIfAlreadyCityExists_false() {
         //Given
-        let city = City(name: "Dublin", country: "Ireland", time: "10:30")
+        let city = City(name: "Dublin", country: "Ireland", date: Date())
         viewModel.savedSearch(cityName: city.name)
         
         //WHEN
@@ -61,8 +61,8 @@ final class SearchHistoryViewModel_Tests: XCTestCase {
     
     func testSearchHistory_deleteAll() {
         //Given
-        let city = City(name: "Dublin", country: "Ireland", time: "10:30")
-        let city2 = City(name: "Vancouver", country: "Canada", time: "11:30")
+        let city = City(name: "Dublin", country: "Ireland", date: Date())
+        let city2 = City(name: "Vancouver", country: "Canada", date: Date())
         viewModel.savedSearch(cityName: city.name)
         viewModel.savedSearch(cityName: city2.name)
         

@@ -8,37 +8,30 @@
 import Foundation
 import SwiftUI
 
-class WeatherDetailsViewModel: ObservableObject {
+// Add "final" to any class we don't subclass. This helps the compiler make optimizations and is especially useful in larger projects.
+final class WeatherDetailsViewModel: ObservableObject {
     
-    private var cityName : String
-    @Published var weather = Weather(temp: 0, city: City(name: "no name", country: "no country", time: "no time"), imageURL: "no image", tempFerinheight: 0 , image: Image("placeholder"))
+    private var cityName: String
+    
+    // No need to define an "empty" weather object. Create this as an optional and then once we have the data, populate a Weather object and assign to the variable.
+    @Published var weather: Weather?
     @Published var isLoading = true
         
     let networkManager: NetworkManagerProtocol
     
     init(cityName: String, networkManager: NetworkManagerProtocol = NetworkManager()) {
-            self.networkManager = networkManager
-            self.cityName = cityName
-            self.getWeatherData(cityName: cityName) { [self] weather in
+        self.networkManager = networkManager
+        self.cityName = cityName
         
-                isLoading = false
-                
-                self.weather.tempCelcuis = weather.current.temperature
-                self.weather.city.country = weather.location.country
-                self.weather.city.time = weather.location.localtime
-                self.weather.imageURL = weather.current.weather_icons[0]
-                self.weather.city.formattedDate = self.weather.city.time.convertToDisplayDateFormat()
-                self.weather.city.formattedTime = self.weather.city.time.convertToDisplayTimeFormat()
-                
-                
-                self.getWeatherImage(withString: self.weather.imageURL) { image, error in
-                    self.weather.image = image
-                    self.weather.setSharableDetails()
-                    
-                }
+        self.getWeatherData(cityName: cityName) { [self] weather in
+            isLoading = false
+            self.weather = Weather.from(weatherResponse: weather)
+            guard var wthr = self.weather else { return }
+            
+            self.getWeatherImage(withString: wthr.imageURLString) { image, error in
+                wthr.image = image
             }
-            self.weather.city.name = cityName
-        
+        }
     }
 
     func getWeatherData(cityName: String, completion: @escaping (WeatherResponse) -> ()) {
@@ -49,7 +42,6 @@ class WeatherDetailsViewModel: ObservableObject {
                 completion(weather)
             }
         }
-        weather.tempFerinheight = calculateFahrenheit(celsius: weather.tempCelcuis)
     }
     
     func getWeatherImage(withString: String, completion: @escaping (Image, NetworkError?) -> ()) {
@@ -58,12 +50,6 @@ class WeatherDetailsViewModel: ObservableObject {
                 completion(image, error)
             }
         }
-    }
-    
-    func calculateFahrenheit(celsius: Int) -> Int {
-        var fahrenheit: Int
-        fahrenheit = celsius * 9 / 5 + 32
-        return fahrenheit
     }
 }
 

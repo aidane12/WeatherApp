@@ -29,7 +29,6 @@ struct SearchHistoryView: View {
                 }
                 .onDelete { indexSet in
                     searchHistoryViewModel.deleteCitySearch(at: indexSet, citySearches: citySearches)
-                    
                 }
             }
             .navigationBarTitle("Search History")

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-class SearchViewModel: ObservableObject {
+final class SearchViewModel: ObservableObject {
     @Published var searchTerm = ""
     var searchResultsViewArray : [String] = []
     @Published var searchResults: [String] = []
