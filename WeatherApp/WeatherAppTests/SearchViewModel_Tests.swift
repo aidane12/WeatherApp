@@ -39,7 +39,9 @@ final class SearchViewModel_Tests: XCTestCase {
         
         viewModel.addSearchResultsToView() { success in
             if success {
-                XCTAssertTrue(self.viewModel.searchResultsViewArray[0] == "London")
+                
+                // Use AssertEqual instead of AssertTue with ==
+                XCTAssertEqual(self.viewModel.searchResultsViewArray[0], "London")
             } else {
                 XCTFail("Search results view contains no results")
             }

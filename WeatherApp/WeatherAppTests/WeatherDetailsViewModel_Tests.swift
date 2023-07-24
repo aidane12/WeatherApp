@@ -14,21 +14,13 @@ final class WeatherDetailsViewModel_Tests: XCTestCase {
     let viewModel = WeatherDetailsViewModel(cityName: "london", networkManager: MockNetworkManager())
     let expectation = XCTestExpectation(description: "Image url call")
     
-    func testWeatherDetailsAPICall_getWeatherData_locationData() {
+    func testWeatherDetailsAPICall_getWeatherData_correct() {
         viewModel.getWeatherData(cityName: "london") { weatherResponse in
             XCTAssertEqual(weatherResponse.location.name, "London")
             XCTAssertEqual(weatherResponse.location.country, "United Kingdom")
-        }
-    }
-    
-    func testWeatherDetailsAPICall_getWeatherData_weatherData() {
-        viewModel.getWeatherData(cityName: "london") { weatherResponse in
-            XCTAssertTrue(weatherResponse.current.temperature == 8)
-        }
-    }
-    
-    func testWeatherDetailsAPICall_getWeatherData_dateTimeData() {
-        viewModel.getWeatherData(cityName: "london") { weatherResponse in
+            
+            // No need to make mutiple calls to the API in separate tests
+            XCTAssertEqual(weatherResponse.current.temperature, 8)
             XCTAssertEqual(weatherResponse.location.date.convertToDayMonthYearFormat(), "Tuesday, Apr 25" )
             XCTAssertEqual(weatherResponse.location.date.convertToTimeFormat(), "6:27 PM" )
         }
