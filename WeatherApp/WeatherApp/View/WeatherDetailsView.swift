@@ -11,14 +11,11 @@ import SwiftUI
 struct WeatherDetailsView: View {
     
     @ObservedObject var viewModel : WeatherDetailsViewModel
-    @State var ferinheight : Int = 0
-    
-    
-        
+    // No need to create this var. Can just reference vm F temp.
     var body: some View {
         
         ZStack{
-            if viewModel.isLoading {
+            if viewModel.isLoading || viewModel.weather == nil {
                 Color.black.opacity(0.2)
                     .edgesIgnoringSafeArea(.all)
                     .transition(.opacity)
@@ -26,11 +23,13 @@ struct WeatherDetailsView: View {
                 ProgressView()
                     .scaleEffect(2.0)
                     .progressViewStyle(CircularProgressViewStyle())
-            } else {
+            } else if let weather = viewModel.weather {
+                
             VStack(){
                     HStack{
-                        Text(viewModel.weather.city.name + ",")
-                        Text(viewModel.weather.city.country)
+                        // Use string interpolation
+                        Text("\((weather.city.name)),")
+                        Text(weather.city.country)
                     }
                     .font(.system(size: 29, weight: .semibold))
                     .padding(.bottom, 50)
@@ -38,8 +37,8 @@ struct WeatherDetailsView: View {
                     
                     
                     HStack{
-                        viewModel.weather.image
-                            .resizable()
+                        // AsyncImage handles the image loading for us automatically.
+                        AsyncImage(url: weather.imageURL)
                             .scaledToFit()
                             .frame(width: 85)
                             .clipShape(Circle())
@@ -47,16 +46,11 @@ struct WeatherDetailsView: View {
                             .padding(.horizontal)
                             .padding(.top)
                         
-                        
-                        
                         Spacer()
                         
                         VStack(spacing: 4) {
-                            Text("\(viewModel.weather.tempCelcuis) °C /")
-                            Text("\(ferinheight)°F ")
-                                .onAppear {
-                                    ferinheight = viewModel.calculateFahrenheit(celsius: viewModel.weather.tempCelcuis)
-                                }
+                            Text("\(weather.tempCelcius) °C /")
+                            Text("\(weather.tempFahrenheit)°F ")
                         }
                         
                     }
@@ -65,15 +59,16 @@ struct WeatherDetailsView: View {
                     .padding(.bottom, 60)
                     
                     VStack(spacing: 15){
-                        Text("\(viewModel.weather.city.formattedTime ?? "unable to find time")")
+                        Text("\(weather.city.formattedTime)")
                             .font(.system(size: 29, weight: .semibold))
                         
-                        Text("\(viewModel.weather.city.formattedDate ?? "unable to find date")")
+                        Text("\(weather.city.formattedDate)")
                             .font(.system(size: 29, weight: .regular))
                     }
                     .padding(.bottom, 50)
                     
-                    ShareLink(item: viewModel.weather, subject: Text("Weather details"), preview: SharePreview("Share the weather with a friend!",  image: viewModel.weather.image)) {
+                // The image retrieval can be improved. This is where my SwiftUI unfamiliarity prevents me from giving the best answer
+                ShareLink(item: weather, subject: Text("Weather details"), preview: SharePreview("Share the weather with a friend!",  image: weather.image)) {
                         Text("Share with a friend")
                             .foregroundColor(.white)
                             .padding(10)

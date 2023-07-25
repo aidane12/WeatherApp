@@ -7,26 +7,7 @@
 
 import Foundation
 
-extension String {
-    
-    func convertToDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = .current
-        return dateFormatter.date(from: self)
-    }
-    
-    func convertToDisplayDateFormat() -> String {
-        guard let date = self.convertToDate() else { return "N/A"}
-        return date.convertToDayMonthYearFormat()
-    }
-    
-    func convertToDisplayTimeFormat() -> String {
-        guard let date = self.convertToDate() else { return "N/A"}
-        return date.convertToTimeFormat()
-    }
-}
+// By using computed props, we can keep this logic out of a String extension
 
 extension Date {
     
@@ -41,5 +22,4 @@ extension Date {
         dateFormatter.dateFormat = "h:mm a"
         return dateFormatter.string(from: self)
     }
-    
 }

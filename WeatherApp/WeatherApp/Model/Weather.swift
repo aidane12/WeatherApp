@@ -16,27 +16,47 @@ struct Weather: Transferable {
         ProxyRepresentation(exporting: \.sharableDetails)
        }
     
-    var tempCelcuis: Int
-    var tempFerinheight: Int
-    var city: City
-    var imageURL: String
-    var image: Image
-    var sharableDetails: String = ""
+    let tempCelcius: Int
     
-    init(temp: Int, city: City, imageURL: String, tempFerinheight: Int, image: Image) {
-        self.tempCelcuis = temp
-        self.city = city
-        self.imageURL = imageURL
-        self.tempFerinheight = tempFerinheight
-        self.image = image
-        
+    // Create fahrenheit temp as a computed property instead of using a separate function
+    var tempFahrenheit: Int {
+        var fahrenheit: Int
+        fahrenheit = tempCelcius * 9 / 5 + 32
+        return fahrenheit
     }
     
-    mutating func setSharableDetails() {
-        sharableDetails = """
-                        Weather in \(city.name) \(city.country):
-                        Celcuis temp: \(tempCelcuis)
-                        Ferinheight temp: \(tempFerinheight)
-                        """
+    let city: City
+    let imageURLString: String
+    var imageURL: URL? {
+        URL(string: imageURLString)
+    }
+    
+    var image: Image = Image("placeholder")
+    
+    // No need for a mutating func that we call each time. This value can be a computed property
+    var sharableDetails: String {
+        """
+        Weather in \(city.name) \(city.country):
+        Celcius temp: \(tempCelcius)
+        Fahrenheit temp: \(tempFahrenheit)
+        """
+    }
+    
+    init(tempCelcius: Int, city: City, imageURLString: String) {
+        self.tempCelcius = tempCelcius
+        self.city = city
+        self.imageURLString = imageURLString
+    }
+    
+    // Makes it easier to create this object from the response instead of assigning all the values manually in the VM init method
+    static func from(weatherResponse: WeatherResponse) -> Weather {
+        return Weather(tempCelcius: weatherResponse.current.temperature, city: City.from(weatherResponse: weatherResponse), imageURLString: weatherResponse.current.weatherIcons.first ?? "")
+    }
+}
+
+extension Image {
+    init?(data: Data) {
+        guard let image = UIImage(data: data) else { return nil }
+        self.init(uiImage: image)
     }
 }

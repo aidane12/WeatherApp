@@ -21,14 +21,12 @@ struct SearchView: View {
         NavigationStack {
             List {
                 ForEach(viewModel.searchResults, id: \.self) { city in
-                    NavigationLink(
-                        tag: city,
-                        selection: $cityName,
-                        destination: {
-                            WeatherDetailsView(viewModel: WeatherDetailsViewModel(cityName: city))
-                        },
-                        label: {Text(city)}
-                    )
+                    // Replace deprecated init
+                    NavigationLink {
+                        WeatherDetailsView(viewModel: WeatherDetailsViewModel(cityName: city))
+                    } label: {
+                     Text(city)
+                    }
                 }
             }
             .navigationTitle("Weather Search")
